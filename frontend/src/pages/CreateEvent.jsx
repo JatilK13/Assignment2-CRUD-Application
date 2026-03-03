@@ -104,7 +104,7 @@ const CreateEvent = () => {
       </div>
 
       <header className="page-header">
-        <h1>Create Events Page</h1>
+        <h1>Book an Event</h1>
         <p>Here at TMU, we take pride in our campus and encourage our students to use it as much as they can. Book various spaces around campus for free by filling out the form below!</p>
       </header>
 
@@ -120,19 +120,19 @@ const CreateEvent = () => {
                 name="title" 
                 value={formData.title} 
                 onChange={handleChange} 
-                placeholder="e.g., Annual Tech Meetup"
+                placeholder="e.g., Co-op Info Session"
                 required 
               />
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="date">Date</label>
+                <label htmlFor="date">Date 🗓️</label>
                 <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
-                <label htmlFor="location">Location</label>
+                <label htmlFor="location">Location 📍</label>
                 <select id="location" name="location" value={formData.location} onChange={handleChange} required>
                   {LOCATION_DATA.map(loc => (
                     <option key={loc.title} value={loc.title}>{loc.title}</option>
@@ -143,7 +143,7 @@ const CreateEvent = () => {
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="startTime">Start Time</label>
+                <label htmlFor="startTime">Start Time </label>
                 <input type="time" id="startTime" name="startTime" value={formData.startTime} onChange={handleChange} required />
               </div>
 
