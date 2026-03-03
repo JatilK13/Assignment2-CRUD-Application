@@ -56,5 +56,16 @@ async function addTestEventsToMongoDB() {
 // Calls function to populate database
 addTestEventsToMongoDB();
 
+// Gets All Events 
+app.get('/api/events', async (req, res) => {
+    try {
+        const events = await Event.find({});
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error Getting Events: ", error);
+        res.status(500).json({error: "Unable to get the Events"});
+    }
+});
+
 // Starts server
 app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
