@@ -1,13 +1,15 @@
 import React from 'react';
-import './Homepage.css';
+import { useNavigate } from 'react-router-dom';
+import './HomePage.css';
 
-const Homepage = () => {
+const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="home-container">
-
       <header className="hero-section">
         <h1>TMU Event Planner</h1>
-        <p> The central hub to set up, manage, and discover school-wide events. Get involved and make the most of your campus experience.</p>
+        <p>The central hub to set up, manage, and discover school-wide events. Get involved and make the most of your campus experience.</p>
       </header>
 
       <section className="action-cards-container">
@@ -16,13 +18,18 @@ const Homepage = () => {
             <h2>Host an Event</h2>
             <p>Have a great idea? Start planning and bring your campus event to life.</p>
           </div>
-          <button className="btn primary-btn">Create Event</button>
+          <button 
+            className="btn primary-btn" 
+            onClick={() => navigate('/create')}
+          >
+            Create Event
+          </button>
         </div>
 
         <div className="action-card browse-card">
           <div className="card-content">
             <h2>Discover Events</h2>
-            <p>See what's happening around campus and join the fun.</p>
+            <p>See what's happening around campus this week and RSVP to join the fun.</p>
           </div>
           <button className="btn secondary-btn">View Events</button>
         </div>
@@ -77,6 +84,7 @@ const Homepage = () => {
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
         <p>These are just a few of the events you can be a part of. <strong>Get involved today!</strong></p>
       </footer>
@@ -84,4 +92,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;

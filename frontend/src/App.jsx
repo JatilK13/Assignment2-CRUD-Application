@@ -1,13 +1,17 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage.jsx";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import CreateEvent from './pages/CreateEvent';
 
-export default function App() {
+const App = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/create" element={<CreateEvent />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
-}
+};
+
+export default App;

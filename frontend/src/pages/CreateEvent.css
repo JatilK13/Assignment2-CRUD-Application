@@ -1,0 +1,287 @@
+:root {
+    --primary-blue: #004c9b; 
+    --primary-hover: #003670;
+    --bg-color: #e0f2fe; /* Light blue background */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --card-bg: #ffffff;
+    --border-color: #cbd5e1;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-event-container {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--text-main);
+    width: 100%;
+    position: relative; /* Anchors the absolute positioned back button */
+  }
+  
+  /* Navigation Top Bar */
+  .nav-container {
+    position: absolute; 
+    top: 30px;          
+    left: 30px;         
+  }
+  
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .back-btn:hover {
+    background-color: rgba(0, 76, 155, 0.1); 
+    transform: translateX(-5px); 
+  }
+  
+  /* Header */
+  .page-header {
+    text-align: center;
+    max-width: 800px;
+    margin-bottom: 40px;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+  
+  .page-header p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* Form Section */
+  .form-section {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 60px;
+  }
+  
+  .form-card {
+    background-color: var(--card-bg);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    border-top: 6px solid var(--primary-blue);
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+  
+  input, select {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 76, 155, 0.15);
+    background-color: #fff;
+  }
+  
+  .form-actions {
+    margin-top: 30px;
+    text-align: right;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+  }
+  
+  /* Reused Button Styles */
+  .btn {
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .primary-btn {
+    background-color: var(--primary-blue);
+    color: white;
+  }
+  
+  .primary-btn:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  /* Location Previews */
+  .locations-preview {
+    width: 100%;
+    max-width: 1100px;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--text-main);
+  }
+  
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .preview-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease;
+  }
+  
+  .preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .preview-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .preview-info {
+    padding: 20px;
+  }
+  
+  .preview-info h4 {
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .preview-info p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Carousel Wrapper and Grid */
+  .carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .carousel-grid {
+    display: grid;
+    /* Forces exactly 3 columns on desktop */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+    width: 100%;
+    flex: 1;
+  }
+  
+  /* Carousel Buttons */
+  .carousel-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .carousel-btn:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: scale(1.1);
+  }
+  
+  /* Gray out the button when we hit the end of the list */
+  .carousel-btn:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* Simple fade animation when cards change */
+  .fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsive constraints for the carousel */
+  @media (max-width: 900px) {
+    .carousel-grid {
+      grid-template-columns: repeat(2, 1fr); /* Show 2 on medium screens */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .carousel-grid {
+      grid-template-columns: 1fr; /* Show 1 on mobile */
+    }
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+    }
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
