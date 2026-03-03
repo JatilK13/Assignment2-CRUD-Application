@@ -56,6 +56,7 @@ async function addTestEventsToMongoDB() {
 // Calls function to populate database
 addTestEventsToMongoDB();
 
+// *** SERVER READ ***
 // Gets All Events 
 app.get('/api/events', async (req, res) => {
     try {
@@ -64,6 +65,82 @@ app.get('/api/events', async (req, res) => {
     } catch (error) {
         console.error("Error Getting Events: ", error);
         res.status(500).json({error: "Unable to get the Events"});
+    }
+});
+
+/*** SERVER READ ***/
+// Gets all Events 
+app.get('/api/events', async (req, res) => {
+    try {
+        const events = await Event.find({});
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error Getting Events: ", error);
+        res.status(500).json({error: "Unable to get the Events"});
+    }
+});
+
+/*** SERVER READ ***/
+// Gets an Event by eventID 
+// Returns a json object with the event that matches the eventID
+app.get('/api/events/eventID/:eventID', async (req, res) => {
+    try {
+        const { eventID } = req.params;
+
+        const event = await Event.findOne({ eventID: String(eventID) });
+        
+        if (!event) {
+            return res.status(404).json({error: "Event not found"});
+        }
+
+        res.status(200).json(event);
+
+    } catch (error) {
+        res.status(500).json({ error: "Failed to Get Event" });
+    }
+});
+
+/*** SERVER READ ***/
+// Returns a json object with all the events that match the location (can be multiple)
+app.get('/api/events/search', async (req, res) => {
+
+    try {
+        const eventLocation  = req.query.location;
+    
+        if (!eventLocation) {
+            return res.status(400).json({ error: "Location query parameter is required" });
+        }
+
+        const events = await Event.find({location: {$regex: eventLocation, $options: 'i' }});
+
+        if (events.length === 0) {
+            return res.status(404).json({error: "No Events Found for this Location"});
+        }
+
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({error: "Failed to Search for Events"});
+    }
+});
+
+/*** SERVER DELETE ***/
+// Delete Event by eventID
+app.delete('/api/events/eventID/:eventID', async (req, res) => {
+
+    try {
+        const { eventID } = req.params;
+        const deleted = await Event.findOneAndDelete(
+            { eventID: String(eventID) }
+        );
+
+        if (!deleted) {
+            return res.status(404).json({ error: "Event not Found"});
+        }
+
+        res.status(204).send();
+
+    } catch (error) {
+        res.status(500).json({ error: "Failed to Delete Event"});
     }
 });
 
