@@ -4,13 +4,12 @@ import './Homepage.css';
 const Homepage = () => {
   return (
     <div className="home-container">
-      {/* Hero Section */}
+
       <header className="hero-section">
         <h1>TMU Event Planner</h1>
-        <p>Your central hub to set up, manage, and discover school-wide events. Get involved and make the most of your campus experience.</p>
+        <p> The central hub to set up, manage, and discover school-wide events. Get involved and make the most of your campus experience.</p>
       </header>
 
-      {/* Main Action Cards */}
       <section className="action-cards-container">
         <div className="action-card create-card">
           <div className="card-content">
@@ -23,13 +22,12 @@ const Homepage = () => {
         <div className="action-card browse-card">
           <div className="card-content">
             <h2>Discover Events</h2>
-            <p>See what's happening around campus this week and RSVP to join the fun.</p>
+            <p>See what's happening around campus and join the fun.</p>
           </div>
           <button className="btn secondary-btn">View Events</button>
         </div>
       </section>
 
-      {/* Featured Events Gallery */}
       <section className="featured-section">
         <h3 className="section-title">Featured Activities</h3>
         <div className="gallery-grid">
@@ -79,7 +77,6 @@ const Homepage = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="footer">
         <p>These are just a few of the events you can be a part of. <strong>Get involved today!</strong></p>
       </footer>

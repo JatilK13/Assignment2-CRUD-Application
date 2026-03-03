@@ -1,9 +1,8 @@
-/* Color Variables & Base Setup */
 :root {
-    --primary-blue: #004c9b; /* Classic university blue */
+    --primary-blue: #004c9b; 
     --primary-hover: #003670;
-    --accent-color: #fbd304; /* Gold/Yellow accent */
-    --bg-color: #e0f2fe; /* Soft light blue */
+    --accent-color: #fbd304; 
+    --bg-color: #e0f2fe; 
     --text-main: #1e293b;
     --text-muted: #64748b;
     --card-bg: #ffffff;
