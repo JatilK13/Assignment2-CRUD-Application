@@ -10,6 +10,7 @@ const DATABASE_HOST = 'localhost';
 const DATABASE_PORT = 27017;
 
 app.use(cors());
+app.use(express.json());
 
 // Database connect
 const dbURL = `mongodb://${DATABASE_HOST}:${DATABASE_PORT}/events_database`;
@@ -146,19 +147,20 @@ app.delete('/api/events/eventID/:eventID', async (req, res) => {
 
 /*** SERVER CREATE ***/
 // Create Event
-app.post('api/events', express.json(), async (req, res) => {
+app.post('/api/events', express.json(), async (req, res) => {
+    console.log("Incoming Data from React:", req.body);
     try {
         // Separate and store each field from the request body
         const {eventID, title, date, startTime, endTime, location} = req.body;
 
         // Validate all of the fields have data entered
-        if(!eventID || !title || !date || !startTime || endTime || location) {
+        if(!eventID || !title || !date || !startTime || !endTime || !location) {
             return res.status(400).json({ error: 'The ID, Title, Date, Start Time, End Time, and Location of the event are required'});
         }
 
         // Check that the start time is before the end time
-        let startTimeNum = Number(startTime.value.split(':').join(''));
-        let endTimeNum = Number(endTime.value.split(':').join(''));
+        let startTimeNum = Number(startTime.split(':').join(''));
+        let endTimeNum = Number(endTime.split(':').join(''));
         if(startTimeNum > endTimeNum) {
             return res.status(400).json({ error: 'The Start Time must be before the End Time'});
         }

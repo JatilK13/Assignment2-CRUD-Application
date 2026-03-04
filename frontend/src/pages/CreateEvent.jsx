@@ -82,18 +82,60 @@ const CreateEvent = () => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Frontend Time Validation
     if (formData.startTime && formData.endTime) {
       if (formData.endTime <= formData.startTime) {
         alert("Error: The event's End Time cannot be before or equal to the Start Time.");
         return; 
       }
     }
-    console.log('Submitting new event:', formData);
-    alert(`Event "${formData.title}" created successfully!`);
-  };
 
+    // Generate a random 4-digit string for the eventID to satisfy the backend schema
+    const generatedEventID = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // Combine our form data with the new ID
+    const eventPayload = {
+      ...formData,
+      eventID: generatedEventID
+    };
+
+    try {
+      // Send the POST request to your Express server running on port 8080
+      const response = await fetch('http://localhost:8080/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventPayload)
+      });
+
+      if (response.ok) {
+        const savedEvent = await response.json();
+        alert(`Success! Event "${savedEvent.title}" (ID: ${savedEvent.eventID}) was created.`);
+        
+        // Optional: Clear the form fields after successful submission
+        setFormData({
+          title: '',
+          date: '',
+          startTime: '',
+          endTime: '',
+          location: LOCATION_DATA[0].title
+        });
+
+      } else {
+        // Handle validation errors sent back from the server (like the 400 status)
+        const errorData = await response.json();
+        alert(`Failed to save: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      alert('Failed to connect to the server. Make sure your Express backend is running on port 8080!');
+    }
+  };
+  
   return (
     <div className="create-event-container">
       
