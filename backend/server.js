@@ -144,5 +144,75 @@ app.delete('/api/events/eventID/:eventID', async (req, res) => {
     }
 });
 
+/*** SERVER CREATE ***/
+// Create Event
+app.post('api/events', express.json(), async (req, res) => {
+    try {
+        // Separate and store each field from the request body
+        const {eventID, title, date, startTime, endTime, location} = req.body;
+
+        // Validate all of the fields have data entered
+        if(!eventID || !title || !date || !startTime || endTime || location) {
+            return res.status(400).json({ error: 'The ID, Title, Date, Start Time, End Time, and Location of the event are required'});
+        }
+
+        // Check that the start time is before the end time
+        let startTimeNum = Number(startTime.value.split(':').join(''));
+        let endTimeNum = Number(endTime.value.split(':').join(''));
+        if(startTimeNum > endTimeNum) {
+            return res.status(400).json({ error: 'The Start Time must be before the End Time'});
+        }
+
+        // Create a new event containing the fields extracted from the request body
+        const newEvent = new Event({
+            eventID: String(eventID),
+            title: title,
+            date: date,
+            startTime: startTime,
+            endTime: endTime,
+            location: location
+        });
+
+        // Save the newly created event to the MongoDB
+        const createdEvent = await newEvent.save();
+
+        // Return the newly created event
+        res.status(201).json(createdEvent);
+    }
+    catch(e) {
+        console.error(e)
+        res.status(500).json({error: 'Failed to create event. ' + e})
+    }
+});
+
+/*** SERVER UPDATE ***/
+// Create Event
+app.patch('api/events/title/:title', express.json(), async (req, res) => {
+    try {
+        // Get the ID and store it
+        const eventID = req.params.eventID
+
+        // Get the title and store it
+        const {title} = req.body;
+
+        // update the event and return the updated book
+        const updatedEvent = await Event.findOneAndUpdate(
+            {eventID: String(eventID) },
+            {title: title},
+            {new: true}
+        )
+
+        // If the event does not exist return an error
+        if (!updatedEvent) {
+            return res.status(404).json({error: 'Event not found'});
+        }
+        // Send the updated book in json format
+        res.status(200).json(updatedEvenet);
+    }
+    catch (e) {
+        res.status(500).json({error: 'Could not update Event'});
+    }
+});
+
 // Starts server
 app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
