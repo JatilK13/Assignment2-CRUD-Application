@@ -209,6 +209,7 @@ app.patch('api/events/title/:title', express.json(), async (req, res) => {
         // Send the updated book in json format
         res.status(200).json(updatedEvenet);
     }
+    
     catch (e) {
         res.status(500).json({error: 'Could not update Event'});
     }
