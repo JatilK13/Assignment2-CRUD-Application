@@ -31,7 +31,11 @@ const HomePage = () => {
             <h2>Discover Events</h2>
             <p>See what's happening around campus this week and RSVP to join the fun.</p>
           </div>
-          <button className="btn secondary-btn">View Events</button>
+          <button 
+          className="btn secondary-btn"
+          onClick={() => navigate('/events')}
+          
+          >View Events</button>
         </div>
       </section>
 
