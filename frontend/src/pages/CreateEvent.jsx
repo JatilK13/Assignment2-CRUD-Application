@@ -115,7 +115,7 @@ const CreateEvent = () => {
         const savedEvent = await response.json();
         alert(`Success! Event "${savedEvent.title}" (ID: ${savedEvent.eventID}) was created.`);
         
-        // Optional: Clear the form fields after successful submission
+        // Clear the form fields after successful submission
         setFormData({
           title: '',
           date: '',
