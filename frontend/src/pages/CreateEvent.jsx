@@ -103,7 +103,6 @@ const CreateEvent = () => {
     };
 
     try {
-      // Send the POST request to your Express server running on port 8080
       const response = await fetch('http://localhost:8080/api/events', {
         method: 'POST',
         headers: {
