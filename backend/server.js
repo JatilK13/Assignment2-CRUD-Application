@@ -70,18 +70,6 @@ app.get('/api/events', async (req, res) => {
 });
 
 /*** SERVER READ ***/
-// Gets all Events 
-app.get('/api/events', async (req, res) => {
-    try {
-        const events = await Event.find({});
-        res.status(200).json(events);
-    } catch (error) {
-        console.error("Error Getting Events: ", error);
-        res.status(500).json({error: "Unable to get the Events"});
-    }
-});
-
-/*** SERVER READ ***/
 // Gets an Event by eventID 
 // Returns a json object with the event that matches the eventID
 app.get('/api/events/eventID/:eventID', async (req, res) => {
@@ -226,7 +214,7 @@ app.patch('api/events/title/:title', express.json(), async (req, res) => {
             return res.status(404).json({error: 'Event not found'});
         }
         // Send the updated book in json format
-        res.status(200).json(updatedEvenet);
+        res.status(200).json(updatedEvent);
     }
     
     catch (e) {
