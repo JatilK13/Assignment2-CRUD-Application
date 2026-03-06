@@ -8,7 +8,7 @@ function ViewEvents() {
 
     // to navigate between pages using react router
     const navigate = useNavigate();
-// use effect runs when the page loads and the backend api is called to get all events from MongoDB
+// use effect runs once the page loads and the backend api is called to get all events from MongoDB
     useEffect(() => {
         fetch("http://localhost:8080/api/events")
         .then(res => res.json())
@@ -19,6 +19,41 @@ function ViewEvents() {
     );
 
 
+    // delete event
+
+    const handleDelete = (eventID) => {
+
+      // calling the backend delete route
+      fetch(`http://localhost:8080/api/events/eventID/${eventID}`, {
+        method: "DELETE"
+      })
+        .then(() => {
+  
+          // remove the deleted event from ui
+          setEvents(events.filter(event => event.eventID !== eventID));
+  
+        })
+        .catch(err => console.error(err));
+    };
+
+    // edit event
+
+    const handleEdit = (eventID) => {
+
+      // temporary for now
+      navigate(`/create?edit=${eventID}`);
+  
+    };
+
+
+
+
+
+
+
+
+
+
     return (
         <div className="events-container">
     
@@ -26,8 +61,7 @@ function ViewEvents() {
     {/* this will button will take the user back to homepage    */}
             <button 
               className="back-btn"
-              onClick={() => navigate("/")}
-            >
+              onClick={() => navigate("/")}>
               Back to Home
             </button>
     
@@ -48,10 +82,29 @@ function ViewEvents() {
                   <p className="event-time">
                     {event.startTime} - {event.endTime}
                   </p>
-    
                   <p className="event-date">
                     {new Date(event.date).toLocaleDateString()}
                   </p>
+
+
+              {/* edit and delete button */}
+              <div className="event-buttons">
+
+                <button
+                className="edit-btn"
+                onClick={() => handleEdit(event.eventID)}>
+                  Edit
+                </button>
+
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(event.eventID)}>
+                  Delete
+                </button>
+
+              </div>
+
+                
     
                 </div>
               ))}

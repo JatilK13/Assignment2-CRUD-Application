@@ -91,3 +91,42 @@
   .back-btn:hover {
     background-color: #174a86;
   }
+
+  /* container for the edit and delete buttons*/
+  .event-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+  }
+
+/* edit button styling */
+ .edit-btn {
+   padding: 8px 16px;
+   border: none;
+   border-radius: 8px;
+   background-color: #1f5fa9;
+   color: white;
+   font-weight: 600;
+   cursor: pointer;
+ }
+
+/* edit button hover effect */
+ .edit-btn:hover {
+   background-color: #174a86;
+ }
+
+/* delete button styling */
+ .delete-btn {
+   padding: 8px 16px;
+   border: none;
+   border-radius: 8px;
+   background-color: #d8c440;
+   color: white;
+   font-weight: 600;
+   cursor: pointer;
+ }
+
+/* delete button hover effect */
+ .delete-btn:hover {
+   background-color: #b53636;
+  }
