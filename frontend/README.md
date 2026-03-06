@@ -1,55 +1,16 @@
-# CPS630 - Assignment 2
-### Group 16: Sarthak Banglorewala, Param Chauhan, Balraj Grewal, Jatil Kapadia
+# React + Vite
 
-## Overview
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-This project was developed with MERN principles to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
+Currently, two official plugins are available:
 
-The application demonstrates client-server communication through a REST API that allows users to GET, POST, UPDATE, and DELETE events. To store the events, a MongoDB database is used to hold all data vital to each event.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Future expansion of this project could involve:
+## React Compiler
 
-- Adding User Authentication
-- Preventing  Booking Conflicts
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
+## Expanding the ESLint configuration
 
-## Documentation: How to Run the Project
-
-1. Install Node.js and MongoDB if not already installed
-
-2. Clone repository
-```shell
-https://github.com/JatilK13/Assignment2-CRUD-Application.git
-```
-
-3. Navigate to the project directory
-
-4. cd to "backend"
-
-4. Install project dependencies
-```shell
-npm install
-```
-
-5. cd back to project directory and then cd to "frontend" 
-
-6. Install project dependencies
-```shell
-npm install
-```
-
-6. Start backend (must be in "backend" directory)
-```shell
-npm run start
-```
-
-7. Start frontend (must be in "frontend" directory)
-```shell
-npm run dev
-```
-
-8. Open your browser and go to:
-```shell
-http://localhost:5173/
-```
-## REFLECTION
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
