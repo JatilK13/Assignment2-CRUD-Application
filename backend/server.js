@@ -193,30 +193,33 @@ app.post('/api/events', express.json(), async (req, res) => {
 });
 
 /*** SERVER UPDATE ***/
-// Create Event
-app.patch('api/events/title/:title', express.json(), async (req, res) => {
+// Update Any Event Field
+app.patch('/api/events/eventID/:eventID', async (req, res) => {
     try {
-        // Get the ID and store it
-        const eventID = req.params.eventID
+        const eventID = req.params.eventID;
 
-        // Get the title and store it
-        const {title} = req.body;
+        // 1. Grab all potential fields from the incoming request
+        const { title, date, startTime, endTime, location } = req.body;
 
-        // update the event and return the updated book
+        // 2. Pass all of them into the update object
         const updatedEvent = await Event.findOneAndUpdate(
-            {eventID: String(eventID) },
-            {title: title},
-            {new: true}
-        )
+            { eventID: String(eventID) },
+            { 
+                title: title,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                location: location 
+            },
+            { returnDocument: 'after' } 
+        );
 
-        // If the event does not exist return an error
         if (!updatedEvent) {
             return res.status(404).json({error: 'Event not found'});
         }
-        // Send the updated book in json format
+        
         res.status(200).json(updatedEvent);
     }
-    
     catch (e) {
         res.status(500).json({error: 'Could not update Event'});
     }

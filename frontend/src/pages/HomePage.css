@@ -72,10 +72,7 @@
     border-top: 6px solid transparent;
   }
   
-  .action-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-  }
+
   
   .create-card { border-top-color: var(--primary-blue); }
   .browse-card { border-top-color: var(--accent-color); }
@@ -153,11 +150,7 @@
     box-shadow: var(--shadow-sm);
     transition: transform 0.3s ease;
   }
-  
-  .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-  }
+
   
   .image-wrapper {
     position: relative;

@@ -93,7 +93,7 @@ const CreateEvent = () => {
       }
     }
 
-    // Generate a random 4-digit string for the eventID to satisfy the backend schema
+    // Generate a random 4-digit string for the eventID for the backend schema
     const generatedEventID = Math.floor(1000 + Math.random() * 9000).toString();
 
     // Combine our form data with the new ID
@@ -131,7 +131,7 @@ const CreateEvent = () => {
       }
     } catch (error) {
       console.error('Network error:', error);
-      alert('Failed to connect to the server. Make sure your Express backend is running on port 8080!');
+      alert('Failed to connect to the server. Make sure backend is running!');
     }
   };
   
@@ -202,7 +202,7 @@ const CreateEvent = () => {
         </div>
       </section>
 
-      {/* 4. Updated Carousel Section */}
+      {/* 4. Carousel Section */}
       <section className="locations-preview">
         <h3 className="section-title">Explore Our Spaces</h3>
         
@@ -212,11 +212,10 @@ const CreateEvent = () => {
             onClick={prevSlide} 
             disabled={carouselIndex === 0}
           >
-            &#10094; {/* Left Arrow HTML entity */}
+            &#10094;
           </button>
 
           <div className="carousel-grid">
-            {/* We slice the array to only show 3 items at a time based on our current index */}
             {LOCATION_DATA.slice(carouselIndex, carouselIndex + itemsToShow).map((loc) => (
               <div className="preview-card fade-in" key={loc.title}>
                 <img src={loc.img} alt={loc.title} />
@@ -233,7 +232,7 @@ const CreateEvent = () => {
             onClick={nextSlide} 
             disabled={carouselIndex === LOCATION_DATA.length - itemsToShow}
           >
-            &#10095; {/* Right Arrow HTML entity */}
+            &#10095; 
           </button>
         </div>
       </section>

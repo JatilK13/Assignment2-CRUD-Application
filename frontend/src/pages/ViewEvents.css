@@ -1,132 +1,166 @@
+.view-events-container {
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text-main);
+  position: relative;
+}
 
-/* background and spacing for the whole page*/
-.events-container {
-    background-color: #eaf2f8;
-    min-height: 100vh;
-    padding: 60px 20px;
-  }
-  
-/*  to center the content in the page */
-  .events-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
+.nav-container-view {
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+}
 
-  /* styling for the page title   */
-  .events-title {
-    text-align: center;
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    color: #1b2b41;
-  }
-  
-  /* container that holds the event cards */
-  .events-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
-  
+/* Search Toolbar */
+.search-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 40px;
+  justify-content: space-between;
+}
 
-  /* styling for each card */
-  .event-card {
-    background: rgb(242, 244, 245);
-    border-radius: 14px;
-    padding: 25px 30px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  /* hover effect to make the card look slightly lifted */
-  .event-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-  }
-  
-  /* styling for events title */
-  .event-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1b2b41;
-    margin-bottom: 10px;
-  }
-  
+.search-group {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-width: 250px;
+}
 
-  /* styling for event location */
-  .event-location {
-    font-size: 16px;
-    color: #555;
-  }
-  
+.search-group input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
 
-  /* styling for event time */
-  .event-time {
-    font-size: 16px;
-    color: #444;
-  }
-  
+.clear-btn {
+  height: stretch;
+}
 
-  /* styling for event date */
-  .event-date {
-    font-size: 15px;
-    color: #777;
-  }
-  
+.status-msg {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
 
-  /* styling for back button */
-  .back-btn {
-    margin-bottom: 30px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #1f5fa9;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  
-  /* hover effect for the back button */
-  .back-btn:hover {
-    background-color: #174a86;
-  }
+.error-msg {
+  color: #dc2626;
+}
 
-  /* container for the edit and delete buttons*/
-  .event-buttons {
-    margin-top: 12px;
-    display: flex;
-    gap: 10px;
-  }
+/* Events Grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
 
-/* edit button styling */
- .edit-btn {
-   padding: 8px 16px;
-   border: none;
-   border-radius: 8px;
-   background-color: #1f5fa9;
-   color: white;
-   font-weight: 600;
-   cursor: pointer;
- }
+.event-detail-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: var(--shadow-md);
+  border-top: 5px solid var(--primary-blue);
+  position: relative;
+  transition: transform 0.2s ease;
+}
 
-/* edit button hover effect */
- .edit-btn:hover {
-   background-color: #174a86;
- }
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
 
-/* delete button styling */
- .delete-btn {
-   padding: 8px 16px;
-   border: none;
-   border-radius: 8px;
-   background-color: #d8c440;
-   color: white;
-   font-weight: 600;
-   cursor: pointer;
- }
+.event-id-badge {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
 
-/* delete button hover effect */
- .delete-btn:hover {
-   background-color: #b53636;
-  }
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.event-title {
+  color: var(--primary-blue);
+  font-size: 1.4rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.event-info p {
+  margin: 8px 0;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+/* Edit & Delete Buttons */
+.edit-icon, .delete-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.delete-icon {
+  font-size: 1.2rem;
+}
+
+.edit-mode {
+  margin-bottom: 15px;
+}
+
+.edit-input {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-blue);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}

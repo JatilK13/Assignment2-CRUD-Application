@@ -1,119 +1,252 @@
-import { useEffect, useState } from "react";
-import "./ViewEvents.css";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './ViewEvents.css';
 
-function ViewEvents() {
+const LOCATIONS = [
+  'ILC Lounge', 'Kerr Hall Upper Gym', 'Kerr Quad', 'MAC Court', 
+  'RAC Court 1', 'RAC Court 2', 'RCC', 'SCC', 'SLC Amphitheatre', 'TRSM Building'
+];
 
-    const [events, setEvents] = useState([]);
+const ViewEvents = () => {
+  const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    // to navigate between pages using react router
-    const navigate = useNavigate();
-// use effect runs once the page loads and the backend api is called to get all events from MongoDB
-    useEffect(() => {
-        fetch("http://localhost:8080/api/events")
-        .then(res => res.json())
-        .then(data => setEvents(data))
-        .catch(err => console.error(err));
+  const [searchId, setSearchId] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
 
-    }, [] 
-    );
+  const [editingId, setEditingId] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    title: '', date: '', startTime: '', endTime: '', location: ''
+  });
 
+  const API_URL = 'http://127.0.0.1:8080/api/events';
 
-    // delete event
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
 
-    const handleDelete = (eventID) => {
-
-      // calling the backend delete route
-      fetch(`http://localhost:8080/api/events/eventID/${eventID}`, {
-        method: "DELETE"
-      })
-        .then(() => {
-  
-          // remove the deleted event from ui
-          setEvents(events.filter(event => event.eventID !== eventID));
-  
-        })
-        .catch(err => console.error(err));
-    };
-
-    // edit event
-
-    const handleEdit = (eventID) => {
-
-      // temporary for now
-      navigate(`/create?edit=${eventID}`);
-  
-    };
-
-
-
-
-
-
-
-
-
-
-    return (
-        <div className="events-container">
-    
-          <div className="events-wrapper">
-    {/* this will button will take the user back to homepage    */}
-            <button 
-              className="back-btn"
-              onClick={() => navigate("/")}>
-              Back to Home
-            </button>
-    
-            <h1 className="events-title">Campus Events</h1>
-    
-            <div className="events-grid">
-    
-    {/* creating cards for each event */}
-              {events.map(event => (
-                <div key={event._id} className="event-card">
-    
-                  <h2 className="event-title">{event.title}</h2>
-    
-                  <p className="event-location">
-                    {event.location}
-                  </p>
-    
-                  <p className="event-time">
-                    {event.startTime} - {event.endTime}
-                  </p>
-                  <p className="event-date">
-                    {new Date(event.date).toLocaleDateString()}
-                  </p>
-
-
-              {/* edit and delete button */}
-              <div className="event-buttons">
-
-                <button
-                className="edit-btn"
-                onClick={() => handleEdit(event.eventID)}>
-                  Edit
-                </button>
-
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(event.eventID)}>
-                  Delete
-                </button>
-
-              </div>
-
-                
-    
-                </div>
-              ))}
-    
-            </div>
-    
-          </div>
-    
-        </div>
-      );
+  const fetchAllEvents = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error('Failed to fetch events');
+      const data = await response.json();
+      setEvents(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSearchById = async (e) => {
+    e.preventDefault();
+    if (!searchId) return fetchAllEvents();
+    
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`${API_URL}/eventID/${searchId}`);
+      if (!response.ok) {
+        if (response.status === 404) throw new Error('No event found with that ID');
+        throw new Error('Failed to search by ID');
+      }
+      const data = await response.json();
+      setEvents([data]); 
+    } catch (err) {
+      setError(err.message);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchByLocation = async (e) => {
+    e.preventDefault();
+    if (!searchLocation) return fetchAllEvents();
+
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`${API_URL}/search?location=${searchLocation}`);
+      if (!response.ok) {
+        if (response.status === 404) throw new Error('No events found at this location');
+        throw new Error('Failed to search by location');
+      }
+      const data = await response.json();
+      setEvents(data);
+    } catch (err) {
+      setError(err.message);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startEditing = (ev) => {
+    setEditingId(ev.eventID);
+    setEditFormData({
+      title: ev.title,
+      date: ev.date ? ev.date.split('T')[0] : '', 
+      startTime: ev.startTime,
+      endTime: ev.endTime,
+      location: ev.location
+    });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveEdit = async (eventID) => {
+    if (editFormData.startTime && editFormData.endTime) {
+      if (editFormData.endTime <= editFormData.startTime) {
+        alert("Error: End Time cannot be before Start Time.");
+        return; 
+      }
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/eventID/${eventID}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editFormData)
+      });
+
+      if (!response.ok) throw new Error('Failed to update event');
+      
+      const updatedEvent = await response.json();
+      setEvents(events.map(ev => ev.eventID === eventID ? updatedEvent : ev));
+      setEditingId(null); 
+      
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleDelete = async (eventID) => {
+    if(!window.confirm('Are you sure you want to delete this event?')) return;
+    try {
+      const response = await fetch(`${API_URL}/eventID/${eventID}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete');
+      setEvents(events.filter(ev => ev.eventID !== eventID));
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  const formatDate = (dateString) => {
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  return (
+    <div className="view-events-container">
+      <div className="nav-container-view">
+        <button className="back-btn" onClick={() => navigate('/')}>
+          ← Back to Home
+        </button>
+      </div>
+
+      <header className="page-header">
+        <h1>Discover Events</h1>
+        <p>Browse all upcoming campus events, or search for something specific.</p>
+      </header>
+
+      <section className="search-toolbar">
+        <form onSubmit={handleSearchById} className="search-group">
+          <input 
+            type="text" 
+            placeholder="Search by Event ID (e.g., 2476)" 
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}
+          />
+          <button type="submit" className="btn secondary-btn">Find ID</button>
+        </form>
+
+        <form onSubmit={handleSearchByLocation} className="search-group">
+          <input 
+            type="text" 
+            placeholder="Search by Location" 
+            value={searchLocation}
+            onChange={(e) => setSearchLocation(e.target.value)}
+          />
+          <button type="submit" className="btn secondary-btn">Find Location</button>
+        </form>
+
+        <button onClick={fetchAllEvents} className="btn primary-btn clear-btn">
+          View All Events
+        </button>
+      </section>
+
+      {loading && <p className="status-msg">Loading events...</p>}
+      {error && <p className="status-msg error-msg">{error}</p>}
+      {!loading && !error && events.length === 0 && (
+        <p className="status-msg">No events found.</p>
+      )}
+
+      <section className="events-grid">
+        {events.map((ev) => (
+          <div className="event-detail-card" key={ev.eventID}>
+            <div className="card-header">
+              <span className="event-id-badge">ID: {ev.eventID}</span>
+              <button className="text-link delete-link" onClick={() => handleDelete(ev.eventID)}>Delete</button>
+            </div>
+            
+            <div className="card-body">
+              {editingId === ev.eventID ? (
+                <div className="edit-mode-form">
+                  <input type="text" name="title" value={editFormData.title} onChange={handleEditChange} className="edit-input main-title-edit" placeholder="Event Title"/>
+                  
+                  <div className="edit-grid">
+                    <div>
+                      <label>Date</label>
+                      <input type="date" name="date" value={editFormData.date} onChange={handleEditChange} className="edit-input" />
+                    </div>
+                    <div>
+                      <label>Location</label>
+                      <select name="location" value={editFormData.location} onChange={handleEditChange} className="edit-input">
+                        {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label>Start Time</label>
+                      <input type="time" name="startTime" value={editFormData.startTime} onChange={handleEditChange} className="edit-input" />
+                    </div>
+                    <div>
+                      <label>End Time</label>
+                      <input type="time" name="endTime" value={editFormData.endTime} onChange={handleEditChange} className="edit-input" />
+                    </div>
+                  </div>
+
+                  <div className="edit-actions">
+                    <button onClick={() => handleSaveEdit(ev.eventID)} className="save-btn">Save</button>
+                    <button onClick={() => setEditingId(null)} className="cancel-btn">Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="title-row">
+                    <h2 className="event-title">{ev.title}</h2>
+                    <button className="text-link edit-link" onClick={() => startEditing(ev)}>Edit</button>
+                  </div>
+                  <div className="event-info">
+                    <p><strong>Date:</strong> {formatDate(ev.date)}</p>
+                    <p><strong>Time:</strong> {ev.startTime} - {ev.endTime}</p>
+                    <p><strong>Location:</strong> {ev.location}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+};
+
 export default ViewEvents;
