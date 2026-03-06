@@ -53,3 +53,9 @@ npm run dev
 http://localhost:5173/
 ```
 ## REFLECTION
+
+This assignment helps us understand how a Mongo+Express+React+Node (MERN) application works. We built off of our previous assignment, as this time we had to implement a MongoDB. From a backend perspective, we had to connect to a MongoDB database, develop a test function that adds test data to the database, and develop a RestAPI to connect the frontend to the backend and allows for creating, reading, updating, and deleting items. For the front end, the task was to create a nice looking user interface to successfully connect to and display the RestAPIs from the backend. 
+
+One challenge that we faced was converting our old makeshift database to a MongoDB database. Some of the CRUD operations were slightly different to implement, which resulted in a different subsequent user interface to go along with it. We had some issues coordinating this new backend with the frontend at first, but with good communication we were able to get the hang of it.
+
+Overall, this project has improved our understanding of MERN applications, giving us experience with developing CRUD operations in a team.
