@@ -86,14 +86,19 @@ app.get('/api/events', async (req, res) => {
 // Returns a json object with the event that matches the eventID
 app.get('/api/events/eventID/:eventID', async (req, res) => {
     try {
+
+        // Get eventID from request
         const { eventID } = req.params;
 
+        // Get Event with eventID from database
         const event = await Event.findOne({ eventID: String(eventID) });
         
+        // If there is no event with the eventID, return error
         if (!event) {
             return res.status(404).json({error: "Event not found"});
         }
 
+        // Json status code for successful get
         res.status(200).json(event);
 
     } catch (error) {
@@ -106,18 +111,24 @@ app.get('/api/events/eventID/:eventID', async (req, res) => {
 app.get('/api/events/search', async (req, res) => {
 
     try {
+
+        // Get location from request
         const eventLocation  = req.query.location;
     
+        // If there is no location, return error status message
         if (!eventLocation) {
             return res.status(400).json({ error: "Location query parameter is required" });
         }
 
+        // Get all events that match the location in database
         const events = await Event.find({location: {$regex: eventLocation, $options: 'i' }});
 
+        // if there are no events with the location, return appropriate error status code
         if (events.length === 0) {
             return res.status(404).json({error: "No Events Found for this Location"});
         }
 
+        // Json status code for successful get
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({error: "Failed to Search for Events"});
@@ -129,15 +140,21 @@ app.get('/api/events/search', async (req, res) => {
 app.delete('/api/events/eventID/:eventID', async (req, res) => {
 
     try {
+
+        // gets eventID from request
         const { eventID } = req.params;
+
+        // Finds event with eventID in the database and deletes it
         const deleted = await Event.findOneAndDelete(
             { eventID: String(eventID) }
         );
 
+        // If there was no event with the specified eventID, return error status code
         if (!deleted) {
             return res.status(404).json({ error: "Event not Found"});
         }
 
+        // Sends succesful status code for delete
         res.status(204).send();
 
     } catch (error) {
