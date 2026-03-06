@@ -241,8 +241,6 @@
   }
   
  
-  
-  /* Gray out the button when we hit the end of the list */
   .carousel-btn:disabled {
     background-color: #cbd5e1;
     cursor: not-allowed;
@@ -259,6 +257,5 @@
     to { opacity: 1; transform: translateY(0); }
   }
   
-  /* Responsive constraints for the carousel */
   
   

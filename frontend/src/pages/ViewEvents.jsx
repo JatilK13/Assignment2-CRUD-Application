@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewEvents.css';
 
+//locations for update
 const LOCATIONS = [
   'ILC Lounge', 'Kerr Hall Upper Gym', 'Kerr Quad', 'MAC Court', 
   'RAC Court 1', 'RAC Court 2', 'RCC', 'SCC', 'SLC Amphitheatre', 'TRSM Building'
 ];
+
+//set use state for current search fields
 
 const ViewEvents = () => {
   const navigate = useNavigate();
@@ -42,6 +45,7 @@ const ViewEvents = () => {
     }
   };
 
+  //search by ID
   const handleSearchById = async (e) => {
     e.preventDefault();
     if (!searchId) return fetchAllEvents();
@@ -64,6 +68,7 @@ const ViewEvents = () => {
     }
   };
 
+  //search by location
   const handleSearchByLocation = async (e) => {
     e.preventDefault();
     if (!searchLocation) return fetchAllEvents();
@@ -86,6 +91,7 @@ const ViewEvents = () => {
     }
   };
 
+  //Update editing
   const startEditing = (ev) => {
     setEditingId(ev.eventID);
     setEditFormData({
@@ -128,6 +134,8 @@ const ViewEvents = () => {
     }
   };
 
+
+  //Delete Event
   const handleDelete = async (eventID) => {
     if(!window.confirm('Are you sure you want to delete this event?')) return;
     try {
@@ -157,6 +165,8 @@ const ViewEvents = () => {
         <p>Browse all upcoming campus events, or search for something specific.</p>
       </header>
 
+      {/* Create Search Bar with presets */}
+
       <section className="search-toolbar">
         <form onSubmit={handleSearchById} className="search-group">
           <input 
@@ -183,7 +193,7 @@ const ViewEvents = () => {
         </button>
       </section>
 
-      {loading && <p className="status-msg">Loading events...</p>}
+      {loading && <p className="status-msg">Loading events</p>}
       {error && <p className="status-msg error-msg">{error}</p>}
       {!loading && !error && events.length === 0 && (
         <p className="status-msg">No events found.</p>
@@ -202,6 +212,8 @@ const ViewEvents = () => {
                 <div className="edit-mode-form">
                   <input type="text" name="title" value={editFormData.title} onChange={handleEditChange} className="edit-input main-title-edit" placeholder="Event Title"/>
                   
+                  
+                  {/* Create Edit Fields*/}
                   <div className="edit-grid">
                     <div>
                       <label>Date</label>
