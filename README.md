@@ -3,7 +3,7 @@
 
 ## Overview
 
-This project was developed with MERN principles to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
+This MERN project was developed to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
 
 The application demonstrates client-server communication through a REST API that allows users to GET, POST, UPDATE, and DELETE events. To store the events, a MongoDB database is used to hold all data vital to each event.
 
