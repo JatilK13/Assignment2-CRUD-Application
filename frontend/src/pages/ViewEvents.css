@@ -1,0 +1,132 @@
+
+/* background and spacing for the whole page*/
+.events-container {
+    background-color: #eaf2f8;
+    min-height: 100vh;
+    padding: 60px 20px;
+  }
+  
+/*  to center the content in the page */
+  .events-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+
+  /* styling for the page title   */
+  .events-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #1b2b41;
+  }
+  
+  /* container that holds the event cards */
+  .events-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+
+  /* styling for each card */
+  .event-card {
+    background: rgb(242, 244, 245);
+    border-radius: 14px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* hover effect to make the card look slightly lifted */
+  .event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+  
+  /* styling for events title */
+  .event-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1b2b41;
+    margin-bottom: 10px;
+  }
+  
+
+  /* styling for event location */
+  .event-location {
+    font-size: 16px;
+    color: #555;
+  }
+  
+
+  /* styling for event time */
+  .event-time {
+    font-size: 16px;
+    color: #444;
+  }
+  
+
+  /* styling for event date */
+  .event-date {
+    font-size: 15px;
+    color: #777;
+  }
+  
+
+  /* styling for back button */
+  .back-btn {
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1f5fa9;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  /* hover effect for the back button */
+  .back-btn:hover {
+    background-color: #174a86;
+  }
+
+  /* container for the edit and delete buttons*/
+  .event-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+  }
+
+/* edit button styling */
+ .edit-btn {
+   padding: 8px 16px;
+   border: none;
+   border-radius: 8px;
+   background-color: #1f5fa9;
+   color: white;
+   font-weight: 600;
+   cursor: pointer;
+ }
+
+/* edit button hover effect */
+ .edit-btn:hover {
+   background-color: #174a86;
+ }
+
+/* delete button styling */
+ .delete-btn {
+   padding: 8px 16px;
+   border: none;
+   border-radius: 8px;
+   background-color: #d8c440;
+   color: white;
+   font-weight: 600;
+   cursor: pointer;
+ }
+
+/* delete button hover effect */
+ .delete-btn:hover {
+   background-color: #b53636;
+  }

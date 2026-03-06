@@ -103,7 +103,6 @@ const CreateEvent = () => {
     };
 
     try {
-      // Send the POST request to your Express server running on port 8080
       const response = await fetch('http://localhost:8080/api/events', {
         method: 'POST',
         headers: {
@@ -116,7 +115,7 @@ const CreateEvent = () => {
         const savedEvent = await response.json();
         alert(`Success! Event "${savedEvent.title}" (ID: ${savedEvent.eventID}) was created.`);
         
-        // Optional: Clear the form fields after successful submission
+        // Clear the form fields after successful submission
         setFormData({
           title: '',
           date: '',
