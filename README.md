@@ -15,7 +15,7 @@ Future expansion of this project could involve:
 
 ## Documentation: How to Run the Project
 
-1. Install Node.js and MongoDB if not already installed (use mongodb://localhost:27017)
+1. Install Node.js and MongoDB if not already installed (use mongodb://localhost:27017 for this project)
 
 2. Clone repository
 ```shell
