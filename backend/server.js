@@ -4,6 +4,8 @@ const app = express();
 const { default: mongoose } = require('mongoose');
 const path = require('path');
 const Event = require('./models/Event');
+const bcrypt = require('bcrypt');
+const User = require('./models/User');
 
 const PORT = 8080;
 const DATABASE_HOST = 'localhost';
@@ -224,6 +226,69 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
         res.status(500).json({error: 'Could not update Event'});
     }
 });
+
+// Register a New User
+app.post('/api/users/register', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Check if username is already taken
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already taken. Please choose another.' });
+        }
+
+        // Hash the password for security
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create and save the new user
+        const newUser = new User({
+            username: username,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully!' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to register user' });
+    }
+});
+
+
+// 2. Login an Existing User
+app.post('/api/users/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Find the user in the database
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid username or password' });
+        }
+
+        // Compare the entered password with the hashed password in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Invalid username or password' });
+        }
+
+        // If successful, send back the username so React knows who is logged in
+        res.status(200).json({ 
+            message: 'Login successful', 
+            username: user.username 
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to log in' });
+    }
+});
+
+
+
 
 // Starts server
 app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
