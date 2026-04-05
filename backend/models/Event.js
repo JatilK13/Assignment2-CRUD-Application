@@ -38,7 +38,12 @@ const EventSchema = new mongoose.Schema({
         type:       String,
         unique:     false,
         required:   true
-    }
+    },
+    username: {
+        type:       String,
+        required:   true,
+        trim:       true
+    }    
 });
 
 const Event = mongoose.model('event', EventSchema);

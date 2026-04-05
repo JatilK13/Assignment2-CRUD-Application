@@ -27,13 +27,13 @@ db.on('open', function() {
     console.log('database connected!');
 });
 
-// Array of test events to add to populate database
+// Array of test events to add to populate database (Added username: "admin" so it doesn't crash)
 let event_library = [
-  {eventID:"2476", title:"First-Year Mixer", date: new Date("2026-03-01"), startTime:"9:30", endTime:"10:30", location:"ILC Lounge"},
-  {eventID:"7840", title:"Pick-up Basketball", date: new Date("2026-03-02"), startTime:"11:00", endTime:"13:00", location:"Kerr Hall Upper Gym"},
-  {eventID:"5293", title:"Concert", date: new Date("2026-03-03"), startTime:"15:30", endTime:"16:00", location:"Kerr Quad"},
-  {eventID:"6803", title:"Drop-In Volleyball", date: new Date("2026-03-04"), startTime:"10:30", endTime:"14:30", location:"Mac Court"},
-  {eventID:"0116", title:"Yoga", date: new Date("2026-03-05"), startTime:"14:30", endTime:"16:00", location:"RAC Court 1"}
+  {eventID:"2476", title:"First-Year Mixer", date: new Date("2026-03-01"), startTime:"9:30", endTime:"10:30", location:"ILC Lounge", username: "admin"},
+  {eventID:"7840", title:"Pick-up Basketball", date: new Date("2026-03-02"), startTime:"11:00", endTime:"13:00", location:"Kerr Hall Upper Gym", username: "admin"},
+  {eventID:"5293", title:"Concert", date: new Date("2026-03-03"), startTime:"15:30", endTime:"16:00", location:"Kerr Quad", username: "admin"},
+  {eventID:"6803", title:"Drop-In Volleyball", date: new Date("2026-03-04"), startTime:"10:30", endTime:"14:30", location:"Mac Court", username: "admin"},
+  {eventID:"0116", title:"Yoga", date: new Date("2026-03-05"), startTime:"14:30", endTime:"16:00", location:"RAC Court 1", username: "admin"}
 ]
 
 // Function to add test events to MongoDB, creating database and entries if not already existing
@@ -59,8 +59,8 @@ async function addTestEventsToMongoDB() {
 // Calls function to populate database
 addTestEventsToMongoDB();
 
-// *** SERVER READ ***
-// Gets All Events 
+/*** SERVER READ (PUBLIC) ***/
+// Gets ALL Events for the public "Discover Events" page
 app.get('/api/events', async (req, res) => {
     try {
         const events = await Event.find({});
@@ -71,12 +71,24 @@ app.get('/api/events', async (req, res) => {
     }
 });
 
+/*** SERVER READ (PRIVATE) ***/
+// Gets only the events created by a specific user for My Events
+app.get('/api/events/user/:username', async (req, res) => {
+    try {
+        const { username } = req.params;
+        const events = await Event.find({ username: username });
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error Getting User Events: ", error);
+        res.status(500).json({error: "Unable to get the Events"});
+    }
+});
+
 /*** SERVER READ ***/
 // Gets an Event by eventID 
 // Returns a json object with the event that matches the eventID
 app.get('/api/events/eventID/:eventID', async (req, res) => {
     try {
-
         // Get eventID from request
         const { eventID } = req.params;
 
@@ -99,9 +111,7 @@ app.get('/api/events/eventID/:eventID', async (req, res) => {
 /*** SERVER READ ***/
 // Returns a json object with all the events that match the location (can be multiple)
 app.get('/api/events/search', async (req, res) => {
-
     try {
-
         // Get location from request
         const eventLocation  = req.query.location;
     
@@ -126,43 +136,37 @@ app.get('/api/events/search', async (req, res) => {
 });
 
 /*** SERVER DELETE ***/
-// Delete Event by eventID
+// Delete Event (Protected: Only Owner Can Delete)
 app.delete('/api/events/eventID/:eventID', async (req, res) => {
-
     try {
-
-        // gets eventID from request
         const { eventID } = req.params;
+        const { username } = req.body; // Grab the username from the request body
 
-        // Finds event with eventID in the database and deletes it
         const deleted = await Event.findOneAndDelete(
-            { eventID: String(eventID) }
+            { eventID: String(eventID), username: username } // Must match ID AND Owner
         );
 
-        // If there was no event with the specified eventID, return error status code
         if (!deleted) {
-            return res.status(404).json({ error: "Event not Found"});
+            return res.status(403).json({ error: "Unauthorized: You can only delete your own events."});
         }
 
-        // Sends succesful status code for delete
         res.status(204).send();
-
     } catch (error) {
         res.status(500).json({ error: "Failed to Delete Event"});
     }
 });
 
 /*** SERVER CREATE ***/
-// Create Event
+// Create Event (Protected: Requires Username)
 app.post('/api/events', express.json(), async (req, res) => {
     console.log("Incoming Data from React:", req.body);
     try {
         // Separate and store each field from the request body
-        const {eventID, title, date, startTime, endTime, location} = req.body;
+        const {eventID, title, date, startTime, endTime, location, username} = req.body;
 
         // Validate all of the fields have data entered
-        if(!eventID || !title || !date || !startTime || !endTime || !location) {
-            return res.status(400).json({ error: 'The ID, Title, Date, Start Time, End Time, and Location of the event are required'});
+        if(!eventID || !title || !date || !startTime || !endTime || !location || !username) {
+            return res.status(400).json({ error: 'All fields, including a username, are required'});
         }
 
         // Check that the start time is before the end time
@@ -179,7 +183,8 @@ app.post('/api/events', express.json(), async (req, res) => {
             date: date,
             startTime: startTime,
             endTime: endTime,
-            location: location
+            location: location,
+            username: username
         });
 
         // Save the newly created event to the MongoDB
@@ -195,17 +200,14 @@ app.post('/api/events', express.json(), async (req, res) => {
 });
 
 /*** SERVER UPDATE ***/
-// Update Any Event Field
+// Update Any Event Field (Protected: Only Owner Can Edit)
 app.patch('/api/events/eventID/:eventID', async (req, res) => {
     try {
         const eventID = req.params.eventID;
+        const { title, date, startTime, endTime, location, username } = req.body;
 
-        // 1. Grab all potential fields from the incoming request
-        const { title, date, startTime, endTime, location } = req.body;
-
-        // 2. Pass all of them into the update object
         const updatedEvent = await Event.findOneAndUpdate(
-            { eventID: String(eventID) },
+            { eventID: String(eventID), username: username }, // Must match ID AND Owner
             { 
                 title: title,
                 date: date,
@@ -217,7 +219,7 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
         );
 
         if (!updatedEvent) {
-            return res.status(404).json({error: 'Event not found'});
+            return res.status(403).json({error: 'Unauthorized: You can only edit your own events.'});
         }
         
         res.status(200).json(updatedEvent);
@@ -227,6 +229,7 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
     }
 });
 
+/*** USER AUTHENTICATION ROUTES ***/
 // Register a New User
 app.post('/api/users/register', async (req, res) => {
     try {
@@ -257,8 +260,7 @@ app.post('/api/users/register', async (req, res) => {
     }
 });
 
-
-// 2. Login an Existing User
+// Login an Existing User
 app.post('/api/users/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -286,9 +288,6 @@ app.post('/api/users/login', async (req, res) => {
         res.status(500).json({ error: 'Failed to log in' });
     }
 });
-
-
-
 
 // Starts server
 app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
