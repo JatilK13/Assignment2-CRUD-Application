@@ -155,7 +155,7 @@ const ViewEvents = () => {
   return (
     <div className="view-events-container">
       <div className="nav-container-view">
-        <button className="back-btn" onClick={() => navigate('/')}>
+        <button className="back-btn" onClick={() => navigate('/home')}>
           ← Back to Home
         </button>
       </div>

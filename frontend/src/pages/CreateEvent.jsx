@@ -139,7 +139,7 @@ const CreateEvent = () => {
     <div className="create-event-container">
       
       <div className="nav-container">
-        <button className="back-btn" onClick={() => navigate('/')}>
+        <button className="back-btn" onClick={() => navigate('/home')}>
           ← Back to Home
         </button>
       </div>
