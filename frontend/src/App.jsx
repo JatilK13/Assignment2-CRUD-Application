@@ -31,7 +31,7 @@ const App = () => {
         {/* Protected Route: Home Page */}
         <Route path="/home" element={
           <PR>
-            <HomePage user={user} />
+            <HomePage user={user} setUser={setUser} />
           </PR>
         } />
 

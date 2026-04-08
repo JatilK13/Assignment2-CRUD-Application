@@ -2,14 +2,28 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
-const HomePage = () => {
+const HomePage = ({user, setUser}) => {
   const navigate = useNavigate();
+
+  // When a user logs out, set the user to null, signifying that nobody is logged in
+  const logout = () => {
+    setUser(null);
+    
+    // Navigate back to the login page
+    navigate('/');
+  }
 
   return (
     <div className="home-container">
+      <button onClick={logout} className="btn logout-btn">
+        Logout
+      </button>
       <header className="hero-section">
         <h1>TMU Event Planner</h1>
-        <p>The central hub to set up, manage, and discover school-wide events. Get involved and make the most of your campus experience.</p>
+        <p>
+          Hi {user}, welcome to the TMU Event Planner! This is the central hub to set up, manage, and discover school-wide 
+          events. Get involved and make the most of your campus experience!
+        </p>
       </header>
 
       <section className="action-cards-container">
