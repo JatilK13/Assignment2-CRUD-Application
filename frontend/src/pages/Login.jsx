@@ -91,28 +91,41 @@ const Login = ({setUser}) => {
 
     return (
         <div className='page-container'>
-          {/* --- Login Form --- */}
-          <div>
-            <h2>Login</h2>
-            <form onSubmit={loginSubmit}>
-              <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
-              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-              <button type="submit">Login</button>
-            </form>
-            {error && <p className="error">{error}</p>}
-          </div>
-    
-          {/* --- Register Form --- */}
-          <div>
-            <h2>Create Account</h2>
-            <form onSubmit={registerSubmit}>
-              <input type="text" placeholder="Username" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} required/>
-              <input type="password" placeholder="Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required/>
-              <button type="submit">Create Account</button>
-            </form>
-            {registerError && <p className="error">{registerError}</p>}
-            {registerSuccess && <p className="success">{registerSuccess}</p>}
-          </div>
+            <header className="hero-section">
+                <h1>TMU Event Planner Login</h1>
+                <p>In order to access the TMU Event Planner, you must log in</p>
+            </header>
+            <section className="cards-container">
+
+                {/* Login */}
+                <div className="card login-card">
+                    <div className="card-material">
+                        <h2>Login</h2>
+                        <p>Already have an account? Log in with your credentials below!</p>
+                        <form onSubmit={loginSubmit}>
+                            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
+                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                            <button type="submit" className="button login-button">Login</button>
+                        </form>
+                        {error && <p className="error-text" >{error}</p>}
+                    </div>
+                </div>
+
+                {/* Register */}
+                <div className="card register-card">
+                    <div className="card-material">
+                        <h2>Create Account</h2>
+                        <p>Don't have an account? Create one by entering a username and password below!</p>
+                        <form onSubmit={registerSubmit}>
+                            <input type="text" placeholder="Username" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} required/>
+                            <input type="password" placeholder="Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required/>
+                            <button type="submit" className="button register-button">Create Account</button>
+                        </form>
+                        {registerError && <p className="error-text">{registerError}</p>}
+                        {registerSuccess && <p className="success-text">{registerSuccess}</p>}
+                    </div>
+                </div>
+            </section>
         </div>
       );
 }
