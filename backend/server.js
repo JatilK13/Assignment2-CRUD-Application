@@ -1,6 +1,17 @@
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 const app = express();
+const server = http.createServer(app);
+
+// start socket.io server and allow communication with frontend using cors
+const io = new Server(server, {
+    cors: {
+        origin: "*"
+    }
+});
+
 const { default: mongoose } = require('mongoose');
 const path = require('path');
 const Event = require('./models/Event');
@@ -13,6 +24,15 @@ const DATABASE_PORT = 27017;
 
 app.use(cors());
 app.use(express.json());
+
+// handles real time client connection using socket
+io.on("connection", (socket) => {
+    console.log("User connected:", socket.id);
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+    });
+});
 
 // Database connect
 const dbURL = `mongodb://${DATABASE_HOST}:${DATABASE_PORT}/events_database`;
@@ -35,6 +55,7 @@ let event_library = [
   {eventID:"6803", title:"Drop-In Volleyball", date: new Date("2026-03-04"), startTime:"10:30", endTime:"14:30", location:"Mac Court", username: "admin"},
   {eventID:"0116", title:"Yoga", date: new Date("2026-03-05"), startTime:"14:30", endTime:"16:00", location:"RAC Court 1", username: "admin"}
 ]
+
 
 // Function to add test events to MongoDB, creating database and entries if not already existing
 async function addTestEventsToMongoDB() {
@@ -150,6 +171,9 @@ app.delete('/api/events/eventID/:eventID', async (req, res) => {
             return res.status(403).json({ error: "Unauthorized: You can only delete your own events."});
         }
 
+        //res.status(204).send();
+        // notify clients that an event was deleted
+        io.emit("eventDeleted", eventID);
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: "Failed to Delete Event"});
@@ -191,7 +215,10 @@ app.post('/api/events', express.json(), async (req, res) => {
         const createdEvent = await newEvent.save();
 
         // Return the newly created event
-        res.status(201).json(createdEvent);
+       // res.status(201).json(createdEvent);
+       // notify client that an event was created
+       io.emit("eventCreated", createdEvent);
+       res.status(201).json(createdEvent);
     }
     catch(e) {
         console.error(e)
@@ -222,6 +249,9 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
             return res.status(403).json({error: 'Unauthorized: You can only edit your own events.'});
         }
         
+        //res.status(200).json(updatedEvent);
+        // notify clients that am event was updated
+        io.emit("eventUpdated", updatedEvent);
         res.status(200).json(updatedEvent);
     }
     catch (e) {
@@ -290,4 +320,7 @@ app.post('/api/users/login', async (req, res) => {
 });
 
 // Starts server
-app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
+//app.listen(PORT, () => { console.log("Server started on port: " + PORT) });
+server.listen(PORT, () => {
+    console.log("Server started on port: " + PORT);
+});

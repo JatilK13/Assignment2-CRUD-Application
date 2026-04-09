@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';
 import './ViewEvents.css';
 
@@ -8,6 +9,7 @@ const LOCATIONS = [
   'RAC Court 1', 'RAC Court 2', 'RCC', 'SCC', 'SLC Amphitheatre', 'TRSM Building'
 ];
 
+const socket = io("http://localhost:8080");
 //set use state for current search fields
 
 const ViewEvents = ({user}) => {
@@ -28,8 +30,25 @@ const ViewEvents = ({user}) => {
 
   useEffect(() => {
     fetchAllEvents();
+    // real time listeners
+    socket.on("eventCreated", (event) => {
+      setEvents(prev => [...prev, event]);
+    });
+  
+    socket.on("eventDeleted", (eventID) => {
+      setEvents(prev => prev.filter(e => e.eventID !== eventID));
+    });
+  
+    socket.on("eventUpdated", (event) => {
+      setEvents(prev =>
+        prev.map(e => e.eventID === event.eventID ? event : e)
+      );
+    });
+  
+    return () => {
+      socket.disconnect();
+    };
   }, []);
-
   const fetchAllEvents = async () => {
     setLoading(true);
     setError('');
