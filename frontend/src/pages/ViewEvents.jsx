@@ -10,7 +10,7 @@ const LOCATIONS = [
 
 //set use state for current search fields
 
-const ViewEvents = () => {
+const ViewEvents = ({user}) => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -247,6 +247,7 @@ const ViewEvents = () => {
                     <button className="text-link edit-link" onClick={() => startEditing(ev)}>Edit</button>
                   </div>
                   <div className="event-info">
+                    <p><strong>Username:</strong> {ev.username}</p>
                     <p><strong>Date:</strong> {formatDate(ev.date)}</p>
                     <p><strong>Time:</strong> {ev.startTime} - {ev.endTime}</p>
                     <p><strong>Location:</strong> {ev.location}</p>

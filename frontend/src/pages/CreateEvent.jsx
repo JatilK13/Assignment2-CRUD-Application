@@ -46,7 +46,7 @@ const LOCATION_DATA = [
   }
 ];
 
-const CreateEvent = () => {
+const CreateEvent = ({user}) => {
   const navigate = useNavigate();
   
   // 2. State for the form data
@@ -96,10 +96,11 @@ const CreateEvent = () => {
     // Generate a random 4-digit string for the eventID for the backend schema
     const generatedEventID = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // Combine our form data with the new ID
+    // Combine our form data with the new ID and username
     const eventPayload = {
       ...formData,
-      eventID: generatedEventID
+      eventID: generatedEventID,
+      username: user // the username of the user that is logged in
     };
 
     try {
