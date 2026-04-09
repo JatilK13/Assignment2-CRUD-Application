@@ -218,6 +218,12 @@ app.post('/api/events', express.json(), async (req, res) => {
        // res.status(201).json(createdEvent);
        // notify client that an event was created
        io.emit("eventCreated", createdEvent);
+
+       // Notification
+       io.emit("notification", {
+        message: `New event create: ${createdEvent.title}`
+       });
+
        res.status(201).json(createdEvent);
     }
     catch(e) {

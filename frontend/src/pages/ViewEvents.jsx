@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { io } from "socket.io-client";
+import socket from '../socket';
 import { useNavigate } from 'react-router-dom';
 import './ViewEvents.css';
 
@@ -9,7 +9,7 @@ const LOCATIONS = [
   'RAC Court 1', 'RAC Court 2', 'RCC', 'SCC', 'SLC Amphitheatre', 'TRSM Building'
 ];
 
-const socket = io("http://localhost:8080");
+
 //set use state for current search fields
 
 const ViewEvents = ({user}) => {
@@ -46,7 +46,9 @@ const ViewEvents = ({user}) => {
     });
   
     return () => {
-      socket.disconnect();
+      socket.off("eventCreated");
+      socket.off("eventDeleted");
+      socket.off("eventUpdated");
     };
   }, []);
   const fetchAllEvents = async () => {

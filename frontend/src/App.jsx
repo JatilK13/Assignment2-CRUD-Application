@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CreateEvent from './pages/CreateEvent';
 import ViewEvents from './pages/ViewEvents';
 import Login from './pages/Login';
+import NotificationContainer from './pages/NotificationContainer';
 
 const App = () => {
 
@@ -24,6 +25,9 @@ const App = () => {
 
   return (
     <Router>
+
+      <NotificationContainer />
+
       <Routes>
         {/* Set the default path to be the login page */}
         <Route path="/" element={<Login setUser={setUser}/>} />
