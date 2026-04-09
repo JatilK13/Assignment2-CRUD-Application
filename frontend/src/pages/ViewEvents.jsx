@@ -141,7 +141,7 @@ const ViewEvents = ({user}) => {
       const response = await fetch(`${API_URL}/eventID/${eventID}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editFormData)
+        body: JSON.stringify({...editFormData, username: user})
       });
 
       if (!response.ok) throw new Error('Failed to update event');
@@ -160,7 +160,11 @@ const ViewEvents = ({user}) => {
   const handleDelete = async (eventID) => {
     if(!window.confirm('Are you sure you want to delete this event?')) return;
     try {
-      const response = await fetch(`${API_URL}/eventID/${eventID}`, { method: 'DELETE' });
+      const response = await fetch(`${API_URL}/eventID/${eventID}`, { 
+        method: 'DELETE',
+        headers: {'content-Type' : 'application/json'},
+        body: JSON.stringify({ username: user})
+      });
       if (!response.ok) throw new Error('Failed to delete');
       setEvents(events.filter(ev => ev.eventID !== eventID));
     } catch (err) {
@@ -225,7 +229,9 @@ const ViewEvents = ({user}) => {
           <div className="event-detail-card" key={ev.eventID}>
             <div className="card-header">
               <span className="event-id-badge">ID: {ev.eventID}</span>
-              <button className="text-link delete-link" onClick={() => handleDelete(ev.eventID)}>Delete</button>
+              {user === ev.username && (
+                <button className="text-link delete-link" onClick={() => handleDelete(ev.eventID)}>Delete</button>
+              )}
             </div>
             
             <div className="card-body">
@@ -265,7 +271,9 @@ const ViewEvents = ({user}) => {
                 <>
                   <div className="title-row">
                     <h2 className="event-title">{ev.title}</h2>
-                    <button className="text-link edit-link" onClick={() => startEditing(ev)}>Edit</button>
+                    {user === ev.username && (
+                      <button className="text-link edit-link" onClick={() => startEditing(ev)}>Edit</button>
+                    )}
                   </div>
                   <div className="event-info">
                     <p><strong>Username:</strong> {ev.username}</p>
