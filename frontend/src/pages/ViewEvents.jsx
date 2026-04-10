@@ -21,6 +21,7 @@ const ViewEvents = ({user}) => {
   const [searchId, setSearchId] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
   const [searchUsername, setSearchUsername] = useState('');
+  const [searchTitle, setSearchTitle] = useState('');
 
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -138,11 +139,11 @@ const ViewEvents = ({user}) => {
     }
   };
 
-  // Search by location
+  // Search by username
   const handleSearchByUsername = async (e) => {
     e.preventDefault();
     if(!searchUsername) {
-      setError("No username has been entered");
+      setError('No username has been entered');
       return;
     }
     
@@ -157,6 +158,40 @@ const ViewEvents = ({user}) => {
       const data = await response.json();
       if(data.length === 0) {
         throw new Error(`No events created by ${searchUsername}`);
+      }
+      setEvents(data);
+    } catch(err) {
+      setError(err.message);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Search by title
+  const handleSearchByTitle = async (e) => {
+    e.preventDefault();
+    if(!searchTitle) {
+      setError('No title has been entered');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`${API_URL}/search/title?title=${searchTitle}`);
+      if(!response.ok) {
+        const errorData = await response.json();
+        if(errorData.error === "No events found with this title") {
+          throw new Error(`No events titled ${searchTitle}`);
+        }
+        throw new Error('Failed to search by title');
+      }
+
+      const data = await response.json();
+
+      if(data.length === 0) {
+        throw new Error(`No events titled ${searchTitle}`);
       }
       setEvents(data);
     } catch(err) {
@@ -223,7 +258,7 @@ const ViewEvents = ({user}) => {
       if (!response.ok) throw new Error('Failed to delete');
       setEvents(events.filter(ev => ev.eventID !== eventID));
     } catch (err) {
-      alert(err.message);
+        alert(err.message);
     }
   }
 
@@ -285,6 +320,19 @@ const ViewEvents = ({user}) => {
             onChange={(e) => setSearchUsername(e.target.value)}
           />
           <button type="submit" className="btn secondary-btn">Find Username</button>
+        </form>
+
+        {/* View My Events */}
+        <form onSubmit={handleSearchByTitle} className="search-group">
+          <input
+            type="text"
+            placeholder="Search by Event Title"
+            value={searchTitle}
+            onChange={(e) => setSearchTitle(e.target.value)}
+          />
+          <button type="submit" className="btn secondary-btn">
+            Find Title
+          </button>
         </form>
 
         {/* View My Events */}
