@@ -300,7 +300,7 @@ const ViewEvents = ({user}) => {
 
         {/* Search by Location */}
         <form onSubmit={handleSearchByLocation} className="search-group">
-          <select onChange={(e) => setSearchLocation(e.target.value)} value={searchLocation}>
+          <select className="location-select" onChange={(e) => setSearchLocation(e.target.value)} value={searchLocation}>
             <option value="">Select a Location</option>
             {LOCATIONS.map((loc) => (
               <option key={loc} value={loc}>{loc}</option>
