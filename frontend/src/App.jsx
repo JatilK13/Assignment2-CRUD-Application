@@ -9,7 +9,9 @@ import NotificationContainer from './pages/NotificationContainer';
 const App = () => {
 
   // create a variable user to track if the user is logged in, setting the initial state as null to signify nobody is logged in
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    return sessionStorage.getItem('user');
+  });
   
   // Create a protected route to prevent accessing other pages without being logged in
   const PR = ({children}) => {
@@ -31,7 +33,7 @@ const App = () => {
 
       <Routes>
         {/* Set the default path to be the login page */}
-        <Route path="/" element={<Login setUser={setUser}/>} />
+        <Route path="/" element={user ? <Navigate to="/home" replace /> : <Login setUser={setUser} />} />
 
         {/* Protected Route: Home Page */}
         <Route path="/home" element={
@@ -55,7 +57,7 @@ const App = () => {
         }/>
 
         {/* If an invalid path is entered, redirect to the home page */}
-        <Route path="*" element={<Navigate to="/home" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

@@ -7,6 +7,7 @@ const HomePage = ({user, setUser}) => {
 
   // When a user logs out, set the user to null, signifying that nobody is logged in
   const logout = () => {
+    sessionStorage.removeItem('user');
     setUser(null);
     
     // Navigate back to the login page

@@ -22,6 +22,7 @@ const Login = ({setUser}) => {
     // Make sure the page does not refresh when the form is submitted as that will erase the stored username/password
     const loginSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
         try{
             // Sending the request to the backend
@@ -43,6 +44,7 @@ const Login = ({setUser}) => {
             }
     
             // If success, store the username in App.jsx and redirect to the home page
+            sessionStorage.setItem('user', data.username);
             setUser(data.username);
             navigate('/home');
 
