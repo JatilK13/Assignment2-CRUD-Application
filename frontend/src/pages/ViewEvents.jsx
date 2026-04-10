@@ -273,6 +273,9 @@ const ViewEvents = ({user}) => {
         <button className="back-btn" onClick={() => navigate('/home')}>
           ← Back to Home
         </button>
+        <button className="back-btn" onClick={() => navigate('/create')}>
+          Go to Create Events →
+        </button>
       </div>
 
       <header className="page-header">

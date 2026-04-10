@@ -143,6 +143,9 @@ const CreateEvent = ({user}) => {
         <button className="back-btn" onClick={() => navigate('/home')}>
           ← Back to Home
         </button>
+        <button className="back-btn" onClick={() => navigate('/events')}>
+          Go to View Events →
+        </button>
       </div>
 
       <header className="page-header">
