@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateEvent.css';
 
@@ -60,7 +60,24 @@ const CreateEvent = ({user}) => {
 
   // 3. State to track which image we are currently starting from in the carousel
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const itemsToShow = 3;
+  
+  // Determines items to show based on screen size
+  const getItemsToShow = () => {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 3;
+  };
+  const [itemsToShow, setItemsToShow] = useState(getItemsToShow());
+
+  // Listens for screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsToShow(getItemsToShow());
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   // Carousel Handlers
   const nextSlide = () => {
