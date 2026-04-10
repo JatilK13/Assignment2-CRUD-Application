@@ -161,7 +161,7 @@ app.get('/api/events/search', async (req, res) => {
 app.delete('/api/events/eventID/:eventID', async (req, res) => {
     try {
         const { eventID } = req.params;
-        const { username } = req.body; // Grab the username from the request body
+        const { username, title } = req.body; // Grab the username from the request body
 
         const deleted = await Event.findOneAndDelete(
             { eventID: String(eventID), username: username } // Must match ID AND Owner
@@ -174,6 +174,12 @@ app.delete('/api/events/eventID/:eventID', async (req, res) => {
         //res.status(204).send();
         // notify clients that an event was deleted
         io.emit("eventDeleted", eventID);
+
+        // Notification for Users Regarding Delete
+        io.emit("notification", {
+            message: `Event Deleted: ${deleted.title}`
+        });
+
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: "Failed to Delete Event"});
@@ -219,7 +225,7 @@ app.post('/api/events', express.json(), async (req, res) => {
        // notify client that an event was created
        io.emit("eventCreated", createdEvent);
 
-       // Notification
+       // Notification for Users Regarding New Event
        io.emit("notification", {
         message: `New event create: ${createdEvent.title}`
        });
@@ -258,6 +264,12 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
         //res.status(200).json(updatedEvent);
         // notify clients that am event was updated
         io.emit("eventUpdated", updatedEvent);
+
+        // Notification for Users Regarding Update
+        io.emit("notification", {
+            message: `Event updated: ${eventID}`
+        });
+
         res.status(200).json(updatedEvent);
     }
     catch (e) {

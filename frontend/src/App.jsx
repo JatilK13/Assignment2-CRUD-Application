@@ -26,6 +26,7 @@ const App = () => {
   return (
     <Router>
 
+      {/* Adds Notification if there are any */}
       <NotificationContainer />
 
       <Routes>
