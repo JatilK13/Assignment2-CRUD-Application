@@ -294,7 +294,7 @@ app.patch('/api/events/eventID/:eventID', async (req, res) => {
 
         // Notification for Users Regarding Update
         io.emit("notification", {
-            message: `Event updated: ${eventID}`
+            message: `Event updated: ID ${eventID}`
         });
 
         res.status(200).json(updatedEvent);
