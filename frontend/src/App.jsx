@@ -28,8 +28,8 @@ const App = () => {
   return (
     <Router>
 
-      {/* Adds Notification if there are any */}
-      <NotificationContainer />
+      {/* Only show notifications when logged in */}
+      {user && <NotificationContainer />}
 
       <Routes>
         {/* Set the default path to be the login page */}
