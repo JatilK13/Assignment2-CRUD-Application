@@ -20,6 +20,7 @@ const ViewEvents = ({user}) => {
 
   const [searchId, setSearchId] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
+  const [searchUsername, setSearchUsername] = useState('');
 
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -66,17 +67,39 @@ const ViewEvents = ({user}) => {
     }
   };
 
+  // Fetch all events by the logged in user
+  const fetchUserEvents = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch (`${API_URL}/user/${user}`);
+      if (!response.ok) {
+        if (response.status === 404) throw new Error(`No events created by ${user}`);
+        throw new Error (`Failed to fetch ${user}'s events`)
+      }
+      const data = await response.json();
+      setEvents(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   //search by ID
   const handleSearchById = async (e) => {
     e.preventDefault();
-    if (!searchId) return fetchAllEvents();
+    if (!searchId) {
+      setError("No ID has been entered");
+      return;
+    }
     
     setLoading(true);
     setError('');
     try {
       const response = await fetch(`${API_URL}/eventID/${searchId}`);
       if (!response.ok) {
-        if (response.status === 404) throw new Error('No event found with that ID');
+        if (response.status === 404) throw new Error(`No event found with ID: ${searchId}`);
         throw new Error('Failed to search by ID');
       }
       const data = await response.json();
@@ -92,19 +115,51 @@ const ViewEvents = ({user}) => {
   //search by location
   const handleSearchByLocation = async (e) => {
     e.preventDefault();
-    if (!searchLocation) return fetchAllEvents();
+    if (!searchLocation) {
+      setError("No location has been selected");
+      return;
+    }
 
     setLoading(true);
     setError('');
     try {
       const response = await fetch(`${API_URL}/search?location=${searchLocation}`);
       if (!response.ok) {
-        if (response.status === 404) throw new Error('No events found at this location');
+        if (response.status === 404) throw new Error(`No events found at the ${searchLocation}`);
         throw new Error('Failed to search by location');
       }
       const data = await response.json();
       setEvents(data);
     } catch (err) {
+      setError(err.message);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Search by location
+  const handleSearchByUsername = async (e) => {
+    e.preventDefault();
+    if(!searchUsername) {
+      setError("No username has been entered");
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`${API_URL}/user/${searchUsername}`);
+      if (!response.ok) {
+        throw new Error('Failed to search by user');
+      }
+
+      const data = await response.json();
+      if(data.length === 0) {
+        throw new Error(`No events created by ${searchUsername}`);
+      }
+      setEvents(data);
+    } catch(err) {
       setError(err.message);
       setEvents([]);
     } finally {
@@ -193,6 +248,8 @@ const ViewEvents = ({user}) => {
       {/* Create Search Bar with presets */}
 
       <section className="search-toolbar">
+
+        {/* Search by ID */}
         <form onSubmit={handleSearchById} className="search-group">
           <input 
             type="text" 
@@ -203,19 +260,38 @@ const ViewEvents = ({user}) => {
           <button type="submit" className="btn secondary-btn">Find ID</button>
         </form>
 
+        {/* Search by Location */}
         <form onSubmit={handleSearchByLocation} className="search-group">
-          <input 
-            type="text" 
-            placeholder="Search by Location" 
-            value={searchLocation}
-            onChange={(e) => setSearchLocation(e.target.value)}
-          />
+          <select onChange={(e) => setSearchLocation(e.target.value)} value={searchLocation}>
+            <option value="">Select a Location</option>
+            {LOCATIONS.map((loc) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+          </select>
           <button type="submit" className="btn secondary-btn">Find Location</button>
         </form>
 
+        {/* View All Events */}
         <button onClick={fetchAllEvents} className="btn primary-btn clear-btn">
           View All Events
         </button>
+
+        {/* Search by Username */}
+        <form onSubmit={handleSearchByUsername} className="search-group">
+          <input 
+            type="text" 
+            placeholder="Search by Username" 
+            value={searchUsername}
+            onChange={(e) => setSearchUsername(e.target.value)}
+          />
+          <button type="submit" className="btn secondary-btn">Find Username</button>
+        </form>
+
+        {/* View My Events */}
+        <button onClick={fetchUserEvents} className="btn primary-btn clear-btn">
+          View My Events
+        </button>
+
       </section>
 
       {loading && <p className="status-msg">Loading events</p>}
