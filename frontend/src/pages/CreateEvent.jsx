@@ -173,12 +173,12 @@ const CreateEvent = ({user}) => {
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="date">Date 🗓️</label>
-                <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
+                <input className="date" type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
                 <label htmlFor="location">Location 📍</label>
-                <select id="location" name="location" value={formData.location} onChange={handleChange} required>
+                <select className="location-select" id="location" name="location" value={formData.location} onChange={handleChange} required>
                   {LOCATION_DATA.map(loc => (
                     <option key={loc.title} value={loc.title}>{loc.title}</option>
                   ))}
@@ -189,12 +189,12 @@ const CreateEvent = ({user}) => {
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="startTime">Start Time </label>
-                <input type="time" id="startTime" name="startTime" value={formData.startTime} onChange={handleChange} required />
+                <input className="time" type="time" id="startTime" name="startTime" value={formData.startTime} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
                 <label htmlFor="endTime">End Time</label>
-                <input type="time" id="endTime" name="endTime" value={formData.endTime} onChange={handleChange} min={formData.startTime} required />
+                <input className="time" type="time" id="endTime" name="endTime" value={formData.endTime} onChange={handleChange} min={formData.startTime} required />
               </div>
             </div>
 
