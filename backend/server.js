@@ -196,7 +196,7 @@ app.get('/api/events/search/date', async (req, res) => {
 app.delete('/api/events/eventID/:eventID', async (req, res) => {
     try {
         const { eventID } = req.params;
-        const { username, title } = req.body; // Grab the username from the request body
+        const { username } = req.body; // Grab the username from the request body
 
         const deleted = await Event.findOneAndDelete(
             { eventID: String(eventID), username: username } // Must match ID AND Owner
