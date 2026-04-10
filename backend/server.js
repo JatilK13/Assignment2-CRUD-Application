@@ -156,6 +156,41 @@ app.get('/api/events/search', async (req, res) => {
     }
 });
 
+/*** SERVER READ ***/
+// Returns a json object with all the events that match a specific date
+app.get('/api/events/search/date', async (req, res) => {
+    try {
+        // Get the date from the request query 
+        const queryDate = req.query.date;
+    
+        if (!queryDate) {
+            return res.status(400).json({ error: "Date query parameter is required (Format: YYYY-MM-DD)" });
+        }
+        
+        // Create a date range to cover the entire day (avoids exact timestamp/timezone misses)
+        const startDate = new Date(queryDate);
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 1);
+
+        // Find events where the date is greater than/equal to the start of the day, and strictly less than the next day
+        const events = await Event.find({
+            date: {
+                $gte: startDate,
+                $lt: endDate
+            }
+        });
+
+        if (events.length === 0) {
+            return res.status(404).json({ error: "No events found for this date" });
+        }
+
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error searching by date: ", error);
+        res.status(500).json({ error: "Failed to search for events by date" });
+    }
+});
+
 /*** SERVER DELETE ***/
 // Delete Event (Protected: Only Owner Can Delete)
 app.delete('/api/events/eventID/:eventID', async (req, res) => {
