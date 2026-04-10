@@ -34,7 +34,7 @@
 .search-group {
   display: flex;
   gap: 10px;
-  flex: 1;
+  flex: 1 1 300px;
   min-width: 250px;
 }
 
