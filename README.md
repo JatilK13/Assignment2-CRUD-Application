@@ -14,7 +14,7 @@ The application demonstrates client-server communication through a REST API that
 
 2. Clone repository
 ```shell
-https://github.com/JatilK13/Assignment2-CRUD-Application.git
+https://github.com/JatilK13/Assignment3-Final-Submission
 ```
 
 3. Navigate to the project directory
