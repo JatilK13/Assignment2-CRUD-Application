@@ -3,7 +3,7 @@
 
 ## Overview
 
-This Final project was developed to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
+This final project was developed to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
 
 The application demonstrates client-server communication through a REST API that allows users to GET, POST, UPDATE, and DELETE events. To store the events, a MongoDB database was used to hold all data and information important to each event. Furthermore, this application contains user login and authentication functionality, allowing for multiple users to login and have their own data. Alongside this, the application uses socket.io to implement an event update/delete/create notification system and real-time communication between clients and server. Finally, the UI of the application was modified to ensure it followed the Nielsen usability principles.
 
