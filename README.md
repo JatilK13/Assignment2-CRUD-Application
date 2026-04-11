@@ -1,16 +1,11 @@
-# CPS630 - Assignment 2
+# CPS630 - Assignment 3
 ### Group 16: Sarthak Banglorewala, Param Chauhan, Balraj Grewal, Jatil Kapadia
 
 ## Overview
 
-This MERN project was developed to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
+This Final project was developed to create a webpage where users can create, edit, and delete TMU campus events. The goal for this project was provide TMU students with a visually-appealing and friendly interface to reserve campus areas for events. 
 
-The application demonstrates client-server communication through a REST API that allows users to GET, POST, UPDATE, and DELETE events. To store the events, a MongoDB database was used to hold all data and information important to each event.
-
-Future expansion of this project could involve:
-
-- Adding User Authentication
-- Preventing  Booking Conflicts
+The application demonstrates client-server communication through a REST API that allows users to GET, POST, UPDATE, and DELETE events. To store the events, a MongoDB database was used to hold all data and information important to each event. Furthermore, this application contains user login and authentication functionality, allowing for multiple users to login and have their own data. Alongside this, the application uses socket.io to implement an event update/delete/create notification system and real-time communication between clients and server. Finally, the UI of the application was modified to ensure it followed the Nielsen usability principles.
 
 
 ## Documentation: How to Run the Project
@@ -54,8 +49,8 @@ http://localhost:5173/
 ```
 ## REFLECTION
 
-This assignment helps us understand how a Mongo+Express+React+Node (MERN) application works. We built off of our previous assignment, as this time we had to implement a MongoDB. From a backend perspective, we had to connect to a MongoDB database, develop a test function that adds test data to the database, and develop a RestAPI to connect the frontend to the backend and allows for creating, reading, updating, and deleting items. For the front end, the task was to create a nice looking user interface to successfully connect to and display the RestAPIs from the backend. 
+This assignment helps us understand how a high-fidelity Mongo+Express+React+Node (MERN) application is built. We built off of our previous assignment, as this time we had to add user authentication to our application. To achieve this, we created a seperate Users mongoose model to store login information, and made new functions for the RestAPI to facilitate the login functionality, while also making use of sessionStorage to track whether the user is logged in or not. We also developed real time communication as instructed using Socket.io, allowing multiple clients to stay up to date by instantly reflecting event updates without requiring a page refresh. This included a notification system that would pop up for all users when a event is created, deleted, or changed. For the front end, the task was to create a nice looking user interface for the notification system and login page that also sucessfully connects to and displays any of the new RESTAPIs from the backend. There were also additional changes to styling for user experience and to ensure that the application followed the Nielsen usability principles discussed in class.
 
-One challenge that we faced was converting our old makeshift database to a MongoDB database. Some of the CRUD operations were slightly different to implement, which resulted in a different subsequent user interface to go along with it. We had some issues coordinating this new backend with the frontend at first, but with good communication we were able to get the hang of it.
+One challenge we faced during this assignment was getting familiar with using socket.io. Since it was a new technology to all of us, understanding how real-time communication works and how to set up event listeners/emit data was difficult at first, occasionally resulting in inconsistencies in how the updates were being shown on the UI. Despite these initial speed bumps, through testing, debugging, and clear communication, we were able to better understand how socket.io functioned and successfully implement the real-time features in our application.
 
-Overall, this project has improved our understanding of MERN applications, giving us experience with developing CRUD operations in a team.
+Overall, this project has improved our understanding of high-fidelity MERN applications, giving us experience in developing authentication and real-time communication features.
